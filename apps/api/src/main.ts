@@ -1,16 +1,28 @@
 import * as express from 'express';
-import { Message } from '@track.rx/api-interfaces';
+import { appRouter, createContext } from '@track.rx/trpc';
+import * as trpcExpress from '@trpc/server/adapters/express';
+import * as cors from 'cors';
 
+// express implementation
 const app = express();
-
-const greeting: Message = { message: 'Welcome to api!' };
-
-app.get('/api', (req, res) => {
-  res.send(greeting);
-});
-
 const port = process.env.port || 3333;
-const server = app.listen(port, () => {
-  console.log('Listening at http://localhost:' + port + '/api');
+
+app.use((req, _res, next) => {
+  // request logger
+  console.log('⬅️ ', req.method, req.path, req.body ?? req.query);
+
+  next();
 });
-server.on('error', console.error);
+
+app.use(cors());
+app.use(
+  '/trpc',
+  trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  })
+);
+
+app.listen(port, () => {
+  console.log(`listening on port ${port}`);
+});

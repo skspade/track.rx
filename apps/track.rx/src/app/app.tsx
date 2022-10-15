@@ -1,27 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { Message } from '@track.rx/api-interfaces';
+import React, { useState } from 'react';
+import { httpBatchLink } from '@trpc/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { trpc } from '../hooks/use-trcp';
+import IndexPage from '../pages/index-page';
+import { environment } from '../environments/environment';
 
 export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
-
-  useEffect(() => {
-    fetch('/api')
-      .then((r) => r.json())
-      .then(setMessage);
-  }, []);
-
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpBatchLink({
+          url: `${environment.base_url}/trpc`,
+          // optional
+          headers() {
+            return {
+              // authorization: getAuthCookie(),
+            };
+          },
+        }),
+      ],
+    })
+  );
   return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to track.rx!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-          alt="Nx - Smart, Fast and Extensible Build System"
-        />
-      </div>
-      <div>{m.message}</div>
-    </>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <IndexPage />
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 };
 
