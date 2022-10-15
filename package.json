@@ -10,7 +10,13 @@
   "private": true,
   "dependencies": {
     "@prisma/client": "^4.4.0",
+    "@tanstack/react-query": "^4.12.0",
+    "@trpc/client": "^10.0.0-proxy-beta.20",
+    "@trpc/next": "^10.0.0-proxy-beta.20",
+    "@trpc/react": "^10.0.0-proxy-beta.20",
+    "@trpc/server": "^10.0.0-proxy-beta.20",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
