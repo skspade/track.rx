@@ -1,0 +1,83 @@
+{
+  "name": "track.rx",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/track.rx/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/track.rx",
+        "index": "apps/track.rx/src/index.html",
+        "baseHref": "/",
+        "main": "apps/track.rx/src/main.tsx",
+        "polyfills": "apps/track.rx/src/polyfills.ts",
+        "tsConfig": "apps/track.rx/tsconfig.app.json",
+        "assets": ["apps/track.rx/src/favicon.ico", "apps/track.rx/src/assets"],
+        "styles": ["apps/track.rx/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack",
+        "postcssConfig": "apps/track.rx/postcss.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/track.rx/src/environments/environment.ts",
+              "with": "apps/track.rx/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "track.rx:build",
+        "hmr": true,
+        "proxyConfig": "apps/track.rx/proxy.conf.json"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "track.rx:build:development"
+        },
+        "production": {
+          "buildTarget": "track.rx:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/track.rx/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/track.rx/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
