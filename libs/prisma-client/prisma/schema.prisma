@@ -16,15 +16,43 @@ model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
-  posts Post[]
+  password String
+  patientGroups PatientGroup[]
 }
 
+model PatientGroup {
+  id        Int      @id @default(autoincrement())
+  name      String
+  patients  Patient[]
+}
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Patient {
+  id           Int                  @id @default(autoincrement())
+  name         String
+  medications  PatientMedication[]
+  published    Boolean              @default(false)
+  author       User                 @relation(fields: [authorId], references: [id])
+  authorId     Int
+  group        PatientGroup         @relation(fields: [groupId], references: [id])
+}
+
+model PatientMedication {
+  id            Int        @id @default(autoincrement())
+  patientId     Int
+  medicationId  Int
+  scheduledTime DateTime
+  patient       Patient    @relation(fields: [patientId], references: [id])
+  medication    Medication @relation(fields: [medicationId], references: [id])
+}
+
+model Medication {
+  id        Int                   @id @default(autoincrement())
+  name      String
+  patients  PatientMedication[]
+  type      EnumMedicationType
+}
+
+enum EnumMedicationType {
+  OTC
+  RX
 }
