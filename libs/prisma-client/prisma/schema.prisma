@@ -1,9 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native"]
-  output   = "../src"
+  output        = "../src"
 }
 
 datasource db {
@@ -11,29 +11,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  password String
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String?
+  password      String
   patientGroups PatientGroup[]
 }
 
 model PatientGroup {
-  id        Int      @id @default(autoincrement())
-  name      String
-  patients  Patient[]
+  id       Int       @id @default(autoincrement())
+  name     String
+  patients Patient[]
+  users    User[]
+  userId   Int?
 }
 
 model Patient {
-  id           Int                  @id @default(autoincrement())
-  name         String
-  medications  PatientMedication[]
-  published    Boolean              @default(false)
-  author       User                 @relation(fields: [authorId], references: [id])
-  authorId     Int
-  group        PatientGroup         @relation(fields: [groupId], references: [id])
+  id          Int                 @id @default(autoincrement())
+  name        String
+  medications PatientMedication[]
+  groupId     Int
+  group       PatientGroup        @relation(fields: [groupId], references: [id])
 }
 
 model PatientMedication {
@@ -46,13 +45,8 @@ model PatientMedication {
 }
 
 model Medication {
-  id        Int                   @id @default(autoincrement())
-  name      String
-  patients  PatientMedication[]
-  type      EnumMedicationType
-}
-
-enum EnumMedicationType {
-  OTC
-  RX
+  id       Int                 @id @default(autoincrement())
+  name     String
+  patients PatientMedication[]
+  type     String
 }
