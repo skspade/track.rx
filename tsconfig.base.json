@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@track.rx/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@track.rx/prisma-client": ["libs/prisma-client/src/index.ts"],
+      "@track.rx/prisma-client": ["libs/prisma-client/prisma/index.ts"],
       "@track.rx/trpc": ["libs/trpc/src/index.ts"]
     }
   },

@@ -1,6 +1,7 @@
 import * as trpc from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { publicProcedure, router } from './trpc';
+import patientProcedures from './procedures/patient';
 
 export const createContext = ({
   req,
@@ -29,6 +30,7 @@ export function createRouter() {
 
 export const appRouter = router({
   greeting: publicProcedure.query(() => 'hello tRPC v10!'),
+  ...patientProcedures,
 });
 
 // Export only the **type** of a router to avoid importing server code on the client
